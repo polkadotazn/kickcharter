@@ -97,25 +97,13 @@ const updateChart = () => {
     }
   }
 
-  console.log("whoa",catArr);
   let year = '/09';
   let success = 'successful';
   let data = Queries.query(catArr, year, success);
-  console.log("daddy",data);
-  console.log("daddy2",data[0].usd_goal_real);
   let chartData = [];
   catArr.forEach(cat => {
     chartData.push(Queries.averageBy(cat, data));
   });
-  console.log("poop", chartData);
   kickChart(catArr, chartData);
 
-};
-
-var catSuccessAvg = () => {
-  catArr.map(category => {
-    Queries.averageBy(
-      "usd_goal_real",
-      Queries.query(category, '/09', "successful"));
-  });
 };
