@@ -1,0 +1,21 @@
+*** This selects the class 'main' and changes the inner html to '' ***
+d3.select('.main').html('');
+
+*** Range to map data to pixels ***
+d3.scale.linear();
+.domain([15, 90]) => life expectancy in years
+.range([250, 0]) => svg pixels
+
+*** insert svg element in element into div ***
+var svg = d3.select('.main').append('svg');
+svg.attr('width', 600).attr('height', 300)
+
+y = d3.scale.linear().domain([15, 90]).range(250, 0);
+y(15)
+=> 250
+y(52.5)
+=> 125
+
+Circles: r = sqrt(P=population)
+
+svg.append('circle').attr('fill', 'red')
