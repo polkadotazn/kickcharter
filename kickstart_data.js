@@ -22,27 +22,48 @@ var jsonContent = require("./ks2018.json");
 
 
 
-const query = (catArr, year, success) => {
-  return (jsonContent.filter((el) => (
-    catArr.includes(el.main_category) && el.state === success &&
-      el.deadline.includes(year)
+const query = (catArr, year) => {
+  // TODO return placeholder values for empty categories
+  var rawData = (jsonContent.filter((el) => (
+    catArr.includes(el.category) &&
+      el.year === year
   )));
-
-};
-
-const averageBy = (fieldName, arr) => {
-  let sum = 0;
-  let count = 0;
-  for (let i = 0; i < arr.length; i++) {
-    if(arr[i].main_category === fieldName) {
-      sum += parseInt(arr[i].usd_goal_real);
-      count += 1;
+  const reduced = rawData.reduce((aggregate, current) => {
+    const key = current.year + current.category;
+    if (!aggregate.hasOwnProperty(key)) {
+      aggregate[key] = {
+        year: current.year,
+        category: current.category,
+      };
     }
-  }
-  return sum/count;
+    // TODO combine failed and canceled
+    aggregate[key][current.state] = current;
+    return aggregate;
+  }, {});
+  return catArr.map(cat => {
+    const d = reduced[year + cat];
+    return d || {
+      year: year,
+      category: cat,
+      successful: {},
+      failed: {},
+    };
+  });
 };
+//
+// const averageBy = (fieldName, arr) => {
+//   let sum = 0;
+//   let count = 0;
+//   for (let i = 0; i < arr.length; i++) {
+//     if(arr[i].main_category === fieldName) {
+//       sum += parseInt(arr[i].usd_goal_real);
+//       count += 1;
+//     }
+//   }
+//   return sum/count;
+// };
 
-module.exports = { query, averageBy };
+module.exports = { query };
 
 
 console.log(query(["Dance", "Games"],'/09',"successful"));

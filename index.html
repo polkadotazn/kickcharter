@@ -12,14 +12,15 @@
 
     <div id="main-panel">
       <label> Year (2009-2017):
-        <input id="yr-input" type="text" name="" placeholder="2009">
+        <input id="yr-input" type="number" name="" placeholder="2009" value="2009" min="2009" max="2017">
       </label>
 <!--
       <form class="" action="index.html" method="post">
         <h3 class="box-title">Scale</h3>
       </form> -->
-
-      <canvas id="kickChart" width="900" height="500"></canvas>
+      <div id="chart-container">
+        <canvas id="kickChart"></canvas>
+      </div>
     </div>
 
 

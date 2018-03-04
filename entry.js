@@ -4,6 +4,29 @@ import * as Queries from './kickstart_data';
 let canvas;
 let ctx;
 let kickChart;
+let currentCategoryArray = [];
+let barChartData = {
+    labels: [],
+    datasets: [{
+        label: 'successful projects',
+        data: [],
+        backgroundColor:
+            'rgba(75, 192, 192, 0.2)',
+        borderColor:
+            'rgba(75, 192, 192, 1)',
+        borderWidth: 1
+    },
+    {
+        label: 'failed projects',
+        data: [],
+        backgroundColor:
+            'rgba(255, 99, 132, 0.2)',
+        borderColor:
+            'rgba(255,99,132,1)',
+        borderWidth: 1
+    }
+  ]
+};
 
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -13,97 +36,87 @@ document.addEventListener("DOMContentLoaded", function() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   var select = document.querySelector('.cat-options');
-
-  kickChart = (catArr, succData) => {
-    return(
-      new Chart(ctx, {
-        responsive: 'true',
-        responsiveAnimationDuration: '300',
-        type: 'bar',
-        data: {
-            labels: catArr,
-            datasets: [{
-                label: 'successful projects',
-                data: succData,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(99, 0, 132, 0.2)',
-                    'rgba(54, 162, 200, 0.2)',
-                    'rgba(30, 206, 40, 0.2)',
-                    'rgba(200, 40, 192, 0.2)',
-                    'rgba(153, 18, 255, 0.2)',
-                    'rgba(255, 159, 0, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(99, 0, 132, 1)',
-                    'rgba(54, 162, 200, 1)',
-                    'rgba(30, 206, 40, 1)',
-                    'rgba(200, 40, 192, 1)',
-                    'rgba(153, 18, 255, 1)',
-                    'rgba(255, 159, 0, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                  scaleLabel: {
-                    display: true,
-                    labelString: 'avg goal($) per project'
-                  },
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
+  kickChart = new Chart(ctx, {
+      type: 'bar',
+      data: barChartData,
+      options: {
+          tooltips: {
+            callbacks: {
+              label: function(tooltipItem, data) {
+                var label = "number of projects: ";
+                const tooltipData = data.datasets[tooltipItem.datasetIndex].tooltipData[tooltipItem.index];
+                return label + tooltipData.count;
+              }
             }
-        }
-      })
-    );
-  };
+          },
+          responsive: false,
+          scales: {
+              yAxes: [{
+                scaleLabel: {
+                  display: true,
+                  labelString: 'avg goal($) per project'
+                },
+                  ticks: {
+                      beginAtZero:true
+                  }
+              }]
+          }
+      }
+    });
 });
+
+function updateChartData(data) {
+  barChartData.labels = data.map(d => d.category);
+  barChartData.datasets[0].data = data.map(d => d.successful.goal_avg);
+  barChartData.datasets[0].tooltipData = data.map(d => d.successful);
+  barChartData.datasets[1].data = data.map(d => d.failed.goal_avg);
+  barChartData.datasets[1].tooltipData = data.map(d => d.failed);
+
+  kickChart.update();
+}
 
 
 document.addEventListener("DOMContentLoaded", () => initializeChart());
 
 var initializeChart = () => {
+  document.getElementsByClassName("uncheck-btn")[0].onclick = e => {
+    currentCategoryArray = [];
+    updateChart();
+  };
   document.getElementsByClassName(
-    "cat-options")[0].onclick = e => updateChart(e);
-
+    "cat-options")[0].onclick = e => {
+      const target = e.target;
+      if (target.tagName !== 'INPUT') {
+        return;
+      }
+      if (e.target.checked) {
+        currentCategoryArray.push(e.target.value);
+      } else {
+        currentCategoryArray = currentCategoryArray.filter(x =>
+          x !== e.target.value);
+      }
+      updateChart();
+    };
+  document.getElementById("yr-input").onchange = e => updateChart();
 };
 
 let catArr1;
 const updateChart = () => {
-  catArr1 = document.getElementsByClassName("cat-div");
-  let catArr2 = [];
-  for (let i = 0; i < catArr1.length; i++) {
-      catArr2.push(catArr1[i].getElementsByTagName("input"));
-  }
-  let catArr = [];
-  for (let i = 0; i < catArr2.length; i++) {
-    if (catArr2[i][0].checked) {
-      catArr.push(catArr2[i][0].value);
-    }
-  }
+  // catArr1 = document.getElementsByClassName("cat-div");
+  // let catArr2 = [];
+  // for (let i = 0; i < catArr1.length; i++) {
+  //     catArr2.push(catArr1[i].getElementsByTagName("input"));
+  // }
+  // let catArr = [];
+  // for (let i = 0; i < catArr2.length; i++) {
+  //   if (catArr2[i][0].checked) {
+  //     catArr.push(catArr2[i][0].value);
+  //   }
+  // }
 
-  let year = '/09';
+  let year = document.getElementById("yr-input").value;
   let success = 'successful';
-  let data = Queries.query(catArr, year, success);
-  let chartData = [];
-  catArr.forEach(cat => {
-    chartData.push(Queries.averageBy(cat, data));
-  });
-  kickChart(catArr, chartData);
+  let data = Queries.query(currentCategoryArray, year);
 
+  updateChartData(data);
 };

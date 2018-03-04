@@ -30,6 +30,12 @@ body {
   align-items: center;
 }
 
+#chart-container {
+  width: 1000px;
+  height: 550px;
+  position: relative;
+}
+
 #kickChart {
   margin: 10px;
   border-radius: 8px;
