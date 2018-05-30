@@ -18670,12 +18670,15 @@ var initializeChart = function initializeChart() {
     currentCategoryArray = [];
     updateChart();
   };
+
   document.getElementsByClassName("cat-options")[0].onclick = function (e) {
     var target = e.target;
     if (target.tagName !== 'INPUT') {
       return;
     }
-    if (e.target.checked) {
+    if (target.id === 'selectall') {
+      currentCategoryArray = ["Art", "Comics", "Crafts", "Dance", "Design", "Fashion", "Film & Video", "Food", "Journalism", "Music", "Publishing", "Technology", "Theater"];
+    } else if (e.target.checked) {
       currentCategoryArray.push(e.target.value);
     } else {
       currentCategoryArray = currentCategoryArray.filter(function (x) {
@@ -31374,6 +31377,7 @@ var query = function query(catArr, year) {
   var rawData = jsonContent.filter(function (el) {
     return catArr.includes(el.category) && el.year === year;
   });
+
   var reduced = rawData.reduce(function (aggregate, current) {
     var key = current.year + current.category;
     if (!aggregate.hasOwnProperty(key)) {

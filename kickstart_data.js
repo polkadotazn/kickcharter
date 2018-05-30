@@ -28,6 +28,8 @@ const query = (catArr, year) => {
     catArr.includes(el.category) &&
       el.year === year
   )));
+
+
   const reduced = rawData.reduce((aggregate, current) => {
     const key = current.year + current.category;
     if (!aggregate.hasOwnProperty(key)) {

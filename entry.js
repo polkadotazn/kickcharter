@@ -83,13 +83,16 @@ var initializeChart = () => {
     currentCategoryArray = [];
     updateChart();
   };
+
   document.getElementsByClassName(
     "cat-options")[0].onclick = e => {
       const target = e.target;
       if (target.tagName !== 'INPUT') {
         return;
       }
-      if (e.target.checked) {
+      if (target.id === 'selectall') {
+        currentCategoryArray = ["Art","Comics","Crafts","Dance","Design","Fashion","Film & Video","Food","Journalism","Music","Publishing","Technology","Theater"];
+      } else if (e.target.checked) {
         currentCategoryArray.push(e.target.value);
       } else {
         currentCategoryArray = currentCategoryArray.filter(x =>

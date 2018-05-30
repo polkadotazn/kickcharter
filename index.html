@@ -25,67 +25,75 @@
       </div>
     </div>
 
+    <script language="JavaScript">
+    	function selectAll(source) {
+    		checkboxes = document.getElementsByName('catz');
+    		for(var i in checkboxes)
+    			checkboxes[i].checked = source.checked;
+    	}
+    </script>
+
     <form class="category">
       <h3 class="box-title">Categories</h3>
       <div class="cat-options">
         <div class="cat-div"><label>
-          <input value="allcats" name="" type="checkbox">
+          <input id="selectall" onClick="selectAll(this)" name="catz" type="checkbox">
           Select All
         </label></div>
         <div class="cat-div"><label>
-          <input value="Art" name="" type="checkbox">
+          <input value="Art" name="catz" type="checkbox">
           Art
         </label></div>
         <div class="cat-div"><label>
-          <input value="Comics" name="" type="checkbox">
+          <input value="Comics" name="catz" type="checkbox">
           Comics
         </label></div>
         <div class="cat-div"><label>
-          <input value="Crafts" name="" type="checkbox">
+          <input value="Crafts" name="catz" type="checkbox">
           Crafts
         </label></div>
         <div class="cat-div"><label>
-          <input value="Dance" name="" type="checkbox">
+          <input value="Dance" name="catz" type="checkbox">
           Dance
         </label></div>
         <div class="cat-div"><label>
-          <input value="Design" name="" type="checkbox">
+          <input value="Design" name="catz" type="checkbox">
           Design
         </label></div>
         <div class="cat-div"><label>
-          <input value="Fashion" name="" type="checkbox">
+          <input value="Fashion" name="catz" type="checkbox">
           Fashion
         </label></div>
         <div class="cat-div"><label>
-          <input value="Film & Video" name="" type="checkbox">
+          <input value="Film & Video" name="catz" type="checkbox">
           Film & Video
         </label></div>
         <div class="cat-div"><label>
-          <input value="Food" name="" type="checkbox">
+          <input value="Food" name="catz" type="checkbox">
           Food
         </label></div>
         <div class="cat-div"><label>
-          <input value="Journalism" name="" type="checkbox">
+          <input value="Journalism" name="catz" type="checkbox">
           Journalism
         </label></div>
         <div class="cat-div"><label>
-          <input value="Music" name="" type="checkbox">
+          <input value="Music" name="catz" type="checkbox">
           Music
         </label></div>
         <div class="cat-div"><label>
-          <input value="Photography" name="" type="checkbox">
+          <input value="Photography" name="catz" type="checkbox">
           Photography
         </label></div>
         <div class="cat-div"><label>
-          <input value="Publishing" name="" type="checkbox">
+          <input value="Publishing" name="catz" type="checkbox">
           Publishing
         </label></div>
         <div class="cat-div"><label>
-          <input value="Technology" name="" type="checkbox">
+          <input value="Technology" name="catz" type="checkbox">
           Technology
         </label></div>
         <div class="cat-div"><label>
-          <input value="Theatre" name="" type="checkbox">
+          <input value="Theater" name="catz" type="checkbox">
           Theatre
         </label></div>
       </div>
